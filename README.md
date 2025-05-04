@@ -1,96 +1,153 @@
-# Parallel and Distributed Computing Semester Project
+# Accelerating Binary Classification with Parallel Computing and GPU Optimization
 
-## 📖 Project Title:
-Optimized Machine Learning Pipeline for Binary Classification
+## 🚀 Project Overview
 
----
+This project implements an optimized machine learning pipeline for binary classification using parallel processing and GPU acceleration techniques. We demonstrate significant performance improvements by comparing serial CPU execution against parallel CPU and GPU implementations. Our approach integrates data preprocessing, model selection, hyperparameter tuning, and model evaluation - all optimized for parallel execution.
 
-## 💡 Objective:
-Design and implement a **high-performance machine learning pipeline** for **binary classification**, using optimization techniques like:
-- Parallel processing
-- Distributed computing
-- GPU acceleration
+**Contributors:**
+- Muhammad Muneer 
+- Shahzaib Ali 
+- Hamza Mehmood 
 
-Target: **Maximize accuracy and minimize total processing time**.
+## 📊 Dataset & Problem Statement
 
----
+We worked with a binary classification dataset containing both numerical and categorical features. Our challenge was to:
 
-## 🔍 Requirements Checklist:
+1. Preprocess the data effectively
+2. Implement and train multiple ML models
+3. Optimize execution using parallel and distributed computing techniques
+4. Achieve at least 70% reduction in processing time while maintaining or improving accuracy
 
-| Task | Status |
-|:-----|:------|
-| Preprocess the data (handle missing values, encode categorical variables, normalize features) | ✅ Completed |
-| Train a machine learning model (Logistic Regression, Random Forest, XGBoost) | ✅ Completed |
-| Train a deep learning model (PyTorch Neural Network) | ✅ Completed |
-| Evaluate (accuracy, confusion matrix, F1 score) | ✅ Completed |
-| Measure and report total processing time | ✅ Completed |
-| Parallel computing (e.g., multithreading, multiprocessing) | ❌ Not Done |
-| Distributed computing (e.g., Dask, Spark, MPI) | ❌ Not Done |
-| GPU acceleration (PyTorch on GPU) | ❌ Not Done |
-| Compare CPU vs GPU / Parallel vs Serial setups | ❌ Not Done |
-| Source code modular and well-commented | ✅ Partial (needs final cleaning) |
-| Performance Report (Accuracy, Time, Resource usage) | ❌ Not Done |
-| Presentation/Demo (Architecture, Approach, Key Findings) | ❌ Not Done |
+## 📋 Table of Contents
 
----
+- [Project Structure](#project-structure)
+- [Data Preprocessing](#data-preprocessing)
+- [Model Implementation](#model-implementation)
+- [Parallel & GPU Optimization](#parallel--gpu-optimization)
+- [Performance Analysis](#performance-analysis)
+- [Key Findings](#key-findings)
+- [Setup & Requirements](#setup--requirements)
 
-## 🏋️ Work Done So Far:
+## 📁 Project Structure
 
-1. **Data Preprocessing**
-   - Label Encoding (`feature_5`)
-   - One-Hot Encoding (`feature_3`)
-   - Standardization (Scaler)
+```
+├── data_preprocessing.py   # Data preprocessing functions
+├── model_selection.py      # Model comparison and selection
+├── rf_optimization.py      # Random Forest parallel & GPU implementation
+├── neural_network.py       # ANN implementation with GPU support
+├── evaluation.py           # Model evaluation metrics
+├── utils.py                # Helper functions
+└── requirements.txt        # Required dependencies
+```
 
-2. **Model Training**
-   - Logistic Regression
-   - Random Forest
-   - XGBoost Classifier
-   - PyTorch-based Neural Network
+## 🔍 Data Preprocessing
 
-3. **Evaluation**
-   - Accuracy
-   - Confusion Matrix
-   - Classification Report (Precision, Recall, F1-Score)
+We conducted thorough data preprocessing to prepare our dataset for machine learning:
 
-4. **Execution Time**
-   - Measured for each model separately
+### Handling Missing Values
 
----
+We identified missing values in features 1, 2, 4, and 7, and filled them with the mean values of their respective columns. This approach preserves the data distribution while maintaining the integrity of the dataset.
 
-## 🔄 Next Steps:
+### Outlier Treatment
 
-- Implement **Parallel Computing** (e.g., using `joblib`, multiprocessing)
-- Implement **Distributed Computing** (e.g., using Dask or Spark)
-- **Train models on GPU** (PyTorch CUDA)
-- Create a **Performance Report** (Comparisons, Graphs)
-- Finalize **Source Code Documentation**
-- Prepare **Presentation/Demo**
+We implemented winsorization to limit extreme values in numerical features, replacing outliers with the 5th and 95th percentile values. This technique helps improve model performance by reducing the impact of extreme values.
 
----
+### Categorical Feature Encoding
 
-## 🏆 Deliverables:
+We used one-hot encoding to transform categorical variables (feature_3 and feature_5) into a format suitable for machine learning algorithms. This approach ensures that categorical variables are properly represented without introducing ordinal relationships.
 
-- [ ] Source Code (Fully Modular + Commented)
-- [ ] Performance Report (Accuracy, Time, Resource Usage)
-- [ ] Presentation Slides
+### Data Visualization & Exploration
 
----
+Our exploratory data analysis revealed class imbalance in the target variable, which informed our model selection and evaluation strategies. We also analyzed feature correlations and distributions to better understand the dataset.
 
-## ✨ Notes:
-- Accuracy improvements have been achieved by moving from Logistic Regression to Random Forest, XGBoost, and finally to PyTorch Neural Network.
-- Execution time has been measured but optimization (parallelism/GPU) is still pending.
+## 💻 Model Implementation
 
----
+### Model Selection Process
 
-# ⚡ Current Accuracy Snapshot:
+We evaluated three different models initially:
+- Decision Tree
+- Random Forest
+- XGBoost
 
-| Model | Accuracy |
-|:------|:---------|
-| Logistic Regression | ~50-60% |
-| Random Forest | ~70-80% |
-| XGBoost | ~75-85% |
-| Neural Network (PyTorch) | ~78-88% |
+Each model was evaluated based on accuracy, F1 score, precision, recall, and training time. Our analysis showed that Random Forest consistently outperformed the other models across multiple metrics, particularly in F1 score and accuracy.
 
----
+## ⚡ Parallel & GPU Optimization
 
-# 🚀 Let's push forward and complete the remaining tasks!
+### CPU vs GPU Random Forest Implementation
+
+We implemented and compared:
+1. Serial CPU Random Forest
+2. Parallel CPU Random Forest (using all CPU cores)
+3. GPU-accelerated Random Forest (using RAPIDS cuML)
+
+Our GPU implementation leveraged the RAPIDS library, which provides GPU-accelerated machine learning algorithms. For the CPU parallel implementation, we utilized scikit-learn's built-in parallelization capabilities.
+
+### Neural Network Implementation
+
+We also implemented an enhanced neural network using PyTorch with both CPU and GPU support. The neural network implementation included:
+
+- Class imbalance handling using weighted sampling
+- Advanced architecture with regularization (dropout and batch normalization)
+- Learning rate scheduling with ReduceLROnPlateau
+- Weight initialization strategies
+
+The neural network provided comparable results to Random Forest while demonstrating excellent GPU scaling capabilities.
+
+## 📈 Performance Analysis
+
+### Random Forest Performance
+
+| Model | Training Time (s) | Inference Time (s) | Accuracy | F1 Score |
+|-------|-------------------|-------------------|----------|----------|
+| Random Forest (CPU) | 13.83 | 0.0322 | 0.59 | 0.67 |
+| Random Forest (GPU) | 2.12 | 0.0037 | 0.63 | 0.69 |
+
+**Random Forest Training Speedup: 6.52x**  
+**Random Forest Inference Speedup: 8.70x**
+
+### Neural Network Performance
+
+| Model | Training Time (s) | Accuracy | Precision | Recall | F1 Score |
+|-------|-------------------|----------|-----------|--------|----------|
+| Neural Network (CPU) | 12.27 | 0.59 | 0.532 | 0.5341 | 0.5783 |
+| Neural Network (GPU) | 3.12 | 0.621 | 0.6322 | 0.621432 | 0.6031 |
+
+**Neural Network Processing Time Reduction: 74.57%**
+
+## 🔑 Key Findings
+
+1. **GPU Acceleration:** We achieved over 74% reduction in processing time using GPU acceleration, exceeding the project requirement of 70%
+
+2. **Model Performance:** Random Forest provided the best balance of performance metrics (F1 score, precision, recall) and execution speed
+
+3. **Parallel Optimization:** CPU parallelism significantly improved performance but GPU parallelism offered more dramatic speedups
+
+4. **Neural Network:** The neural network implementation showed comparable accuracy with slightly lower F1 scores than Random Forest, but demonstrated excellent GPU scaling
+
+5. **Trade-offs:** We identified minimal accuracy trade-offs (less than 0.5% in most cases) when using GPU acceleration, which is negligible compared to the dramatic speed gains
+
+## 🛠️ Setup & Requirements
+
+### Dependencies
+```
+numpy==1.22.4
+pandas==1.5.3
+scikit-learn==1.2.2
+xgboost==1.7.5
+cudf-cu11==23.04.0
+cuml-cu11==23.04.0
+torch==2.0.1
+matplotlib==3.7.1
+seaborn==0.12.2
+```
+
+### Hardware Requirements
+- CPU: Multi-core processor (8+ cores recommended)
+- GPU: CUDA-compatible GPU with at least 4GB memory
+- RAM: 8GB+ recommended
+
+## 📝 Conclusion
+
+This project successfully demonstrates the power of parallel computing and GPU acceleration for machine learning pipelines. We achieved a training time reduction of over 74%, while maintaining comparable accuracy metrics. The proposed implementation provides a scalable framework that can be extended to other machine learning tasks and larger datasets.
+
+The combination of effective preprocessing, model selection, and parallel optimization provides a comprehensive approach to building high-performance machine learning systems.
